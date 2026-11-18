@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="zaidimas_racing/zaidimas_racing.vcxproj" Id="99587ac4-f939-4866-a073-4719d94ce706" />
+</Solution>
