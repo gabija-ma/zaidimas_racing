@@ -159,19 +159,19 @@ void SFMLGame::ProcessEvents()
 			continue;
 		}
 
-			if (event.key.code == sf::Keyboard::Escape)
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			if (state == State::Playing || state == State::Paused)
 			{
-				if (state == State::Playing || state == State::Paused)
-				{
-					state = State::Menu;
-				}
-				else
-				{
-					window.close();
-				}
+				state = State::Menu;
 			}
-		else if (state == State::Menu)
+			else
 			{
+				window.close();
+			}
+		}
+		else if (state == State::Menu)
+		{
 			if (event.key.code == sf::Keyboard::Enter)
 			{
 				StartGame();
@@ -201,17 +201,17 @@ void SFMLGame::ProcessEvents()
 				selectedCars[1] = (selectedCars[1] + 1) % carTextures.size();
 			}
 		}
-			else if (state == State::GameOver && event.key.code == sf::Keyboard::Enter)
-			{
-				StartGame();
-			}
-			else if (state == State::Playing)
-			{
+		else if (state == State::GameOver && event.key.code == sf::Keyboard::Enter)
+		{
+			StartGame();
+		}
+		else if (state == State::Playing)
+		{
 			if (event.key.code == sf::Keyboard::P)
-				{
+			{
 				state = State::Paused;
 				continue;
-				}
+			}
 
 			if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D)
 			{
@@ -221,7 +221,7 @@ void SFMLGame::ProcessEvents()
 					player.lane += event.key.code == sf::Keyboard::A ? -1 : 1;
 					player.lane = std::clamp(player.lane, 0, SoloLaneCount - 1);
 				}
-				}
+			}
 			else if (gameMode == GameMode::Multiplayer &&
 				(event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right))
 			{
@@ -231,24 +231,24 @@ void SFMLGame::ProcessEvents()
 					player.lane += event.key.code == sf::Keyboard::Left ? -1 : 1;
 					player.lane = std::clamp(player.lane, SoloLaneCount, MultiplayerLaneCount - 1);
 				}
-				}
 			}
-			else if (state == State::Paused && event.key.code == sf::Keyboard::P)
-			{
-				state = State::Playing;
-			}
+		}
+		else if (state == State::Paused && event.key.code == sf::Keyboard::P)
+		{
+			state = State::Playing;
+		}
 	}
 }
 
 int SFMLGame::ActiveLaneCount() const
 {
 	return gameMode == GameMode::Multiplayer ? MultiplayerLaneCount : SoloLaneCount;
-		}
+}
 
 int SFMLGame::GetPlayerLane(int playerIndex) const
 {
 	return players[playerIndex].lane;
-	}
+}
 
 float SFMLGame::RoadLeft() const
 {
@@ -282,7 +282,7 @@ void SFMLGame::SpawnObject()
 	{
 		const int firstLane = playerIndex == 0 ? 0 : SoloLaneCount;
 		const int lastLane = playerIndex == 0 ? SoloLaneCount - 1 : MultiplayerLaneCount - 1;
-	GameObject object;
+		GameObject object;
 		if (lastSpawnedLanes[playerIndex] >= firstLane && lastSpawnedLanes[playerIndex] <= lastLane)
 		{
 			std::uniform_int_distribution<int> laneOffset(0, lastLane - firstLane - 1);
@@ -295,18 +295,18 @@ void SFMLGame::SpawnObject()
 		else
 		{
 			std::uniform_int_distribution<int> lane(firstLane, lastLane);
-	object.lane = lane(random);
+			object.lane = lane(random);
 		}
-	object.y = -150.f;
-	object.coin = kind(random) == 0;
+		object.y = -150.f;
+		object.coin = kind(random) == 0;
 		if (!object.coin)
-	{
+		{
 			object.textureIndex = obstacle(random);
 		}
 		objects.push_back(object);
 		lastSpawnedLanes[playerIndex] = object.lane;
 	}
-	}
+}
 
 void SFMLGame::HandleObstacleHit(Player& player)
 {
@@ -344,7 +344,7 @@ void SFMLGame::Update()
 		{
 			Player& player = players[playerIndex];
 			if (player.lives <= 0 || player.lane != it->lane)
-		{
+			{
 				continue;
 			}
 
@@ -366,12 +366,12 @@ void SFMLGame::Update()
 			}
 
 			if (noseTouchedObject)
-				{
+			{
 				if (it->coin)
-					{
+				{
 					++player.coins;
 					player.score += 10;
-					}
+				}
 				else
 				{
 					HandleObstacleHit(player);
@@ -490,7 +490,7 @@ void SFMLGame::Draw()
 		if (player.lives <= 0 || (player.blinkTimer > 0.f && static_cast<int>(player.blinkTimer * 12.f) % 2 == 0))
 		{
 			continue;
-	}
+		}
 
 		carSprite.setTexture(carTextures[selectedCars[playerIndex]]);
 		const sf::FloatRect carBounds = carSprite.getLocalBounds();
@@ -498,7 +498,7 @@ void SFMLGame::Draw()
 		carSprite.setScale(carScale, carScale);
 		carSprite.setPosition(LaneCenter(GetPlayerLane(playerIndex)) - carSprite.getGlobalBounds().width / 2.f, PlayerCarY);
 		carSprite.setColor(sf::Color::White);
-	window.draw(carSprite);
+		window.draw(carSprite);
 	}
 
 	if (state == State::Menu)

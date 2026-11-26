@@ -336,7 +336,7 @@ void RaceGame::Draw()
 
 	if (paused)
 	{
-		std::cout << "\n          PAUZe - P, kad testi\n";
+		std::cout << "\n          PAUZE - P, kad testi\n";
 	}
 	else if (gameOver)
 	{
